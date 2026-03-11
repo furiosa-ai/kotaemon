@@ -69,7 +69,7 @@ Use the template like this:
         end_phrase = "@endmindmap"
 
         try:
-            text = text.split(start_phrase)[-1]
+            text = str(text).split(start_phrase)[-1]
             text = text.split(end_phrase)[0]
             text = text.strip().replace("*", "#")
         except IndexError:
@@ -89,7 +89,7 @@ Use the template like this:
             HumanMessage(content=prompt),
         ]
 
-        uml_text = self.llm(messages).text
+        uml_text = self.llm(messages).text()
         markdown_text = self.convert_uml_to_markdown(uml_text)
 
         return Document(

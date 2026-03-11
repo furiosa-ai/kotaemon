@@ -73,7 +73,7 @@ class AddQueryContextPipeline(BaseComponent):
 
         messages.append(HumanMessage(content=f"Generate search query for: {question}"))
 
-        resp = self.llm(messages).text
+        resp = self.llm(messages).text()
         if resp == "0":
             return Document(content="")
 
@@ -283,7 +283,7 @@ class FullQAPipeline(BaseReasoning):
     ) -> Generator[Document, None, Document]:
         if self.use_rewrite and self.rewrite_pipeline:
             print("Chosen rewrite pipeline", self.rewrite_pipeline)
-            message = self.rewrite_pipeline(question=message).text
+            message = self.rewrite_pipeline(question=message).text()
             print("Rewrite result", message)
 
         print(f"Retrievers {self.retrievers}")

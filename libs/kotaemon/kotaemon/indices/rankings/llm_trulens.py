@@ -143,7 +143,7 @@ class LLMTrulensScoring(LLMReranking):
                     )
 
                     def llm_call():
-                        return self.llm(messages).text
+                        return self.llm(messages).text()
 
                     futures.append(executor.submit(llm_call))
 
@@ -160,11 +160,11 @@ class LLMTrulensScoring(LLMReranking):
                         )
                     )
                 )
-                results.append(self.llm(messages).text)
+                results.append(self.llm(messages).text())
 
         # use Boolean parser to extract relevancy output from LLM
         results = [
-            (r_idx, float(re_0_10_rating(result)) / self.normalize)
+            (r_idx, float(re_0_10_rating(str(result))) / self.normalize)
             for r_idx, result in enumerate(results)
         ]
         results.sort(key=lambda x: x[1], reverse=True)

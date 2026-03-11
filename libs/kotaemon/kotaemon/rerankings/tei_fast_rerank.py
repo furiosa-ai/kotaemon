@@ -46,8 +46,7 @@ class TeiFastReranking(BaseReranking):
             url=self.endpoint_url,
             json={
                 "query": query,
-                "texts": truncated_texts,
-                "is_truncated": self.is_truncated,  # default is True
+                "documents": truncated_texts,
             },
         ).json()
         return response
@@ -77,9 +76,10 @@ class TeiFastReranking(BaseReranking):
 
             _docs = [d.content for d in mini_batch]
             rerank_resp = self.client(query, _docs)
-            for r in rerank_resp:
+
+            for r in rerank_resp["results"]:
                 doc = mini_batch[r["index"]]
-                doc.metadata["reranking_score"] = r["score"]
+                doc.metadata["reranking_score"] = r["relevance_score"]
                 compressed_docs.append(doc)
 
         compressed_docs = sorted(

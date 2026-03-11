@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Literal, Optional, TypeVar
 
-from langchain.schema.messages import AIMessage as LCAIMessage
-from langchain.schema.messages import HumanMessage as LCHumanMessage
-from langchain.schema.messages import SystemMessage as LCSystemMessage
-from llama_index.core.bridge.pydantic import Field
+from langchain_core.messages import AIMessage as LCAIMessage
+from langchain_core.messages import HumanMessage as LCHumanMessage
+from langchain_core.messages import SystemMessage as LCSystemMessage
+from pydantic import Field
 from llama_index.core.schema import Document as BaseDocument
 
 if TYPE_CHECKING:
@@ -103,17 +103,17 @@ class BaseMessage(Document):
         raise NotImplementedError
 
 
-class SystemMessage(BaseMessage, LCSystemMessage):
+class SystemMessage(LCSystemMessage):
     def to_openai_format(self) -> "ChatCompletionMessageParam":
         return {"role": "system", "content": self.content}
 
 
-class AIMessage(BaseMessage, LCAIMessage):
+class AIMessage(LCAIMessage):
     def to_openai_format(self) -> "ChatCompletionMessageParam":
         return {"role": "assistant", "content": self.content}
 
 
-class HumanMessage(BaseMessage, LCHumanMessage):
+class HumanMessage(LCHumanMessage):
     def to_openai_format(self) -> "ChatCompletionMessageParam":
         return {"role": "user", "content": self.content}
 

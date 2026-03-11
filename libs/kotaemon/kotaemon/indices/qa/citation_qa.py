@@ -263,12 +263,12 @@ class AnswerWithContextPipeline(BaseComponent):
             # try streaming first
             print("Trying LLM streaming")
             for out_msg in self.llm.stream(messages):
-                output += out_msg.text
+                output += out_msg.text()
                 logprobs += out_msg.logprobs
-                yield Document(channel="chat", content=out_msg.text)
+                yield Document(channel="chat", content=out_msg.text())
         except NotImplementedError:
             print("Streaming is not supported, falling back to normal processing")
-            output = self.llm(messages).text
+            output = self.llm(messages).text()
             yield Document(channel="chat", content=output)
 
         if logprobs:

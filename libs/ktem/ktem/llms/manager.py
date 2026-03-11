@@ -44,6 +44,8 @@ class LLMManager:
             items = session.execute(stmt)
 
             for (item,) in items:
+                if not item.name in ["openai", "ollama"]:
+                    continue
                 self._models[item.name] = deserialize(item.spec, safe=False)
                 self._info[item.name] = {
                     "name": item.name,
